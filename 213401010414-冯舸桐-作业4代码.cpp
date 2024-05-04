@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// 生成随机数
+int generateRandomNumber(int max) {
+    return rand() % max + 1;
+}
+
+// 生成随机运算符
+char generateRandomOperator(char operators[], int numOperators) {
+    return operators[rand() % numOperators];
+}
+
+// 生成四则运算表达式
+void generateExpression(int numExpressions, int maxNumber, char operators[], int numOperators, int allowDecimal, int allowParentheses) {
+    srand(time(NULL));
+    int i;
+    for (int i = 0; i < numExpressions; i++) {
+        int num1 = generateRandomNumber(maxNumber);
+        int num2 = generateRandomNumber(maxNumber);
+        char op = generateRandomOperator(operators, numOperators);
+        
+        // 是否有小数
+        if (allowDecimal) {
+            float decimalNum1 = num1 + (float)rand() / RAND_MAX;
+            float decimalNum2 = num2 + (float)rand() / RAND_MAX;
+            printf("%.2f %c %.2f = ", decimalNum1, op, decimalNum2);
+        } else {
+            printf("%d %c %d = ", num1, op, num2);
+        }
+        
+        // 是否有括号
+        if (allowParentheses && rand() % 2 == 0) {
+            printf("(%d %c %d)", num1, op, num2);
+        } else {
+            printf("%d %c %d", num1, op, num2);
+        }
+        
+        printf("\n");
+    }
+}
+
+int main() {
+    int numExpressions, maxNumber, allowDecimal, allowParentheses;
+    char operators[] = {'+', '-', '*', '/'};
+    int numOperators = sizeof(operators) / sizeof(operators[0]);
+    
+    printf("请输入题目数量：");
+    scanf("%d", &numExpressions);
+    printf("请输入最大数：");
+    scanf("%d", &maxNumber);
+    printf("是否允许小数？(1: 是，0: 否)：");
+    scanf("%d", &allowDecimal);
+    printf("是否允许括号？(1: 是，0: 否)：");
+    scanf("%d", &allowParentheses);
+    
+    generateExpression(numExpressions, maxNumber, operators, numOperators, allowDecimal, allowParentheses);
+    
+    return 0;
+}
